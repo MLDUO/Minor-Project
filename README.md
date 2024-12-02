@@ -56,10 +56,10 @@ InsightXtract is a Flask-based web application designed to extract **entity type
 Here are some screenshots demonstrating the application's output:
 
 #### Input Image
-![UI when Input Image by User](sampleOutputImages\inputByUser.jpg)
+![UI when Input Image by User](sampleOutputImages/inputByUser.jpg)
 
 #### Predicted Output
-![Predicted Output](sampleOutputImages\predictionOutput.jpg)
+![Predicted Output](sampleOutputImages/predictionOutput.jpg)
 
 ---
 
