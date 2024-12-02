@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Entity Extractor</title>
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #6a82fb, #fc5c7d);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0c0f12;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #6a82fb;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #fc5c7d;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        #filtered_values {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #filtered_values p {
+            font-size: 20px;
+            color: #555;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 18px;
+            color: #333;
+        }
+
+        #image {
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 15px 15px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #4a90e2;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #357ab7;
+        }
+
+        #file-name {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #success-message {
+            font-size: 18px;
+            color: #4caf50;
+            margin-top: 10px;
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Product Entity Extractor</h1>
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <label>Upload an Image of the Product:</label>
+            <label class="custom-file-upload">
+                <input type="file" name="image" required style="display: none;" id="fileInput">
+                📁 Choose an Image
+            </label>
+            <!-- Display the selected file name here -->
+            <div id="file-name"></div>
+            <div id="success-message" style="margin-bottom: 20px; font-weight: bold;">File selected successfully!</div>
+            <button id="predictButton" type="submit" style="display:none;">Predict</button>
+        </form>
+
+        <!-- Display the predicted entity type -->
+        {% if predicted_entity is not none %}
+        <div id="result">
+            <p>Predicted Entity Type: <span style="color: #6a82fb;">{{ predicted_entity }}</span></p>
+        </div>
+        {% endif %}
+
+        <!-- Display extracted values if available -->
+        {% if filtered_values %}
+        <div id="filtered_values">
+            <p><strong>Extracted Entity Values:</strong></p>
+            <ul>
+                {% for value in filtered_values %}
+                <li>{{ value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Display the uploaded image -->
+        {% if img_path %}
+        <div id="image">
+            <img src="{{ url_for('static', filename=img_path) }}" alt="Uploaded Image">
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // JavaScript to display file name and success message
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDiv = document.getElementById('file-name');
+        const successMessage = document.getElementById('success-message');
+        const predictButton = document.getElementById('predictButton');
+
+        fileInput.addEventListener('change', function() {
+            const fileName = fileInput.files[0].name;
+            fileNameDiv.textContent = `Selected File: ${fileName}`;
+            successMessage.style.display = 'block';  // Show success message
+            predictButton.style.display = 'initial';
+        });
+    </script>
+</body>
+
+</html>
